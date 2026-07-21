@@ -3,10 +3,11 @@ from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 
-TOKEN = os.getenv("TOKEN")
-ADMIN_ID = 6254922733
+import os
 
-bot = Bot(TOKEN)
+TOKEN = os.getenv("TOKEN")
+ADMIN_ID = 62549227
+
 dp = Dispatcher()
 
 

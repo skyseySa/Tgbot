@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 
-TOKEN = "8533727565:AAEwr8LkVsz3b8SW467F9aJWi_RST8oyKtg"
+TOKEN = os.getenv("TOKEN")
 ADMIN_ID = 6254922733
 
 bot = Bot(TOKEN)

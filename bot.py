@@ -1,9 +1,9 @@
 import asyncio
+import os
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
 from aiogram.types import Message
-
-import os
+from aiohttp import web
 
 TOKEN = os.getenv("TOKEN")
 ADMIN_ID = 6254922733
@@ -48,8 +48,23 @@ async def messages(message: Message):
     )
 
 
+# Добавляем веб-сервер для Render, чтобы он не усыплял бота
+async def handle(request):
+    return web.Response(text="Бот успешно работает!")
+
+
 async def main():
-    print("Бот запущен!")
+    print("Бот запускается...")
+
+    # Создаем мини веб-сервер на порту 10000 (стандартный для Render)
+    app = web.Application()
+    app.router.add_get("/", handle)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, "0.0.0.0", 10000)
+    await site.start()
+
+    print("Веб-сервер активен. Запускаем polling...")
     await dp.start_polling(bot)
 
 

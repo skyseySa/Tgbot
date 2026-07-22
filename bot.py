@@ -40,8 +40,17 @@ async def messages(message: Message):
 """
     )
 
-    await bot.forward_message(
+        await bot.forward_message(
         chat_id=ADMIN_ID,
         from_chat_id=message.chat.id,
         message_id=message.message_id,
     )
+
+
+async def main():
+    print("Бот запущен!")
+    await dp.start_polling(bot)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

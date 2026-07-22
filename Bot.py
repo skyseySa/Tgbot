@@ -6,7 +6,7 @@ from aiogram.types import Message
 import os
 
 TOKEN = os.getenv("TOKEN")
-ADMIN_ID = 62549227
+ADMIN_ID = 6254922733
 
 dp = Dispatcher()
 

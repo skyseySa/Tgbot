@@ -22,27 +22,42 @@ async def start(message: Message):
 
 @dp.message()
 async def messages(message: Message):
+    # ЛОГИКА ДЛЯ АДМИНИСТРАТОРА (ОТВЕТ ПОЛЬЗОВАТЕЛЮ)
     if message.chat.id == ADMIN_ID:
+        # Проверяем, что админ ответил на пересланное сообщение
+        if message.reply_to_message and message.reply_to_message.forward_from:
+            user_id = message.reply_to_message.forward_from.id
+            try:
+                # Отправляем текст админа пользователю
+                await bot.send_message(chat_id=user_id, text=message.text)
+                await message.reply("✅ Ответ успешно отправлен пользователю!")
+            except Exception as e:
+                await message.reply(f"❌ Не удалось отправить ответ. Ошибка: {e}")
+        else:
+            await message.reply(
+                "Чтобы ответить пользователю, сделайте 'Ответ' (Reply) "
+                "на пересланное ботом сообщение."
+            )
         return
 
+    # ЛОГИКА ДЛЯ ПОЛЬЗОВАТЕЛЕЙ (ОТПРАВКА АДМИНУ)
     username = (
         f"@{message.from_user.username}"
         if message.from_user.username
         else "Нет username"
     )
 
-    # Формируем красивую карточку для админа с постоянной ссылкой на чат
+    # Карточка для админа (ссылку на чат убрали, оставили только данные)
     await bot.send_message(
         ADMIN_ID,
         f"📩 *Новое сообщение*\n\n"
         f"👤 *Имя:* {message.from_user.full_name}\n"
         f"🔗 *Username:* {username}\n"
-        f"🆔 *ID:* {message.from_user.id}\n\n"
-        f"💬 [Открыть чат с пользователем](tg://user?id={message.from_user.id})",
+        f"🆔 *ID:* {message.from_user.id}",
         parse_mode="Markdown"
     )
 
-    # Пересылаем сообщение админу
+    # Пересылаем сообщение админу (ВАЖНО: используется forward, чтобы работал reply_to_message.forward_from)
     await bot.forward_message(
         chat_id=ADMIN_ID,
         from_chat_id=message.chat.id,

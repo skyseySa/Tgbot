@@ -8,6 +8,7 @@ import os
 TOKEN = os.getenv("TOKEN")
 ADMIN_ID = 6254922733
 
+bot = Bot(TOKEN)
 dp = Dispatcher()
 
 
